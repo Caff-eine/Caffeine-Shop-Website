@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - www.codingnepalweb.com -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caffeine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  </head>
+  <body>
+    <header class="header">
+      
+
+      <img class="logo" src="Images/logo.png"/>
+
+      <nav class="navbar">
+          <a href="#HOME">HOME</a>
+          <a href="#ABOUT">ABOUT US</a>
+          <a href="#MENU">MENU</a>
+          <a href="#PRODUCTS">OTHER PRODUCTS</a>
+          <a href="#CONTACT">CONTACT US</a>
+          <button id="cart-icon"><i class="fas fa-shopping-cart"></i></button>
+          <div id="cart-container">
+              <div id="cart-total">
+                Total: $<span id="total-amount">0.00</span>
+              </div>
+              <button id="checkout-button">Checkout</button>
+          </div>
+  </header>
+      </nav>
+      
+
+
+    <section id="HOME" class="home-section">
+      <div class="content">
+        <h2>It's All About Coffee</h2>
+        <p>
+          Savor the rich aroma and bold flavors of our handcrafted brews. 
+          From the first sip to the last drop, experience the true essence of coffee bliss with each cup from Caffeine.
+        </p>
+        <button id="order-now-button">Order Now</button>
+      </div>
+    </section>
+
+
+    <section id="ABOUT" class="about">
+      <h1 class="heading">about us</h1>
+      <div class="row">
+        <div class="image">
+          <img src="Images/about.png" alt="">
+        </div>
+        <div class="content">
+          <h3>Caffeine: Where Coffee Addicts Unite</h3>
+          <p>Welcome to Caffeine, your go-to hub for coffee lovers! 
+            Whether you're craving a perfectly brewed cup of joe or searching for top-notch coffee accessories and equipment, we've got you covered.
+             From premium beans to brewing gear and delicious treats, indulge your passion for all things caffeine with us!</p>
+        </div>      
+      </div>
+    </section>
+
+
+
+    <section id="MENU" class="menu">
+      <h1 class="heading">menu</h1>
+      <div class="box-container">
+        <div class="box">
+          <img src="Images/menu1.png" alt="">
+          <h3>Cortado</h3>
+          <div class="price">$3.99</div>
+          <button class="btn add-to-cart" data-name="cortado" data-price="3.99" data-image-url="Images/menu1.png">Add to Cart</button>
+        </div>
+        
+        
+    
+        <div class="box">
+          <img src="Images/menu2.png" alt="">
+          <h3>Cappuccino</h3>
+          <div class="price">$3.99</div>
+          <button class="btn add-to-cart" data-name="Cappuccino" data-price="3.99" data-image-url="Images/menu2.png">Add to Cart</button>
+        </div>
+
+        
+    
+        <div class="box">
+          <img src="Images/menu3.png" alt="">
+          <h3>Drip Coffee</h3>
+          <div class="price">$2.99</div>
+          <button class="btn add-to-cart" data-name="Drip Coffee" data-price="2.99" data-image-url="Images/menu3.png">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/menu4.png" alt="">
+          <h3>Cold Brew</h3>
+          <div class="price">$3.99</div>
+          <button class="btn add-to-cart" data-name="Cold Brew" data-price="3.99" data-image-url="Images/menu4.png">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/menu5.png" alt="">
+          <h3>Latte</h3>
+          <div class="price">$4.99</div>
+          <button class="btn add-to-cart" data-name="Latte" data-price="4.99" data-image-url="Images/menu5.png">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/menu6.png" alt="">
+          <h3>Espresso Shot</h3>
+          <div class="price">$2.99</div>
+          <button class="btn add-to-cart" data-name="Espresso Shot" data-price="2.99" data-image-url="Images/menu6.png">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/menu7.png" alt="">
+          <h3>Flat White</h3>
+          <div class="price">$4.99</div>
+          <button class="btn add-to-cart" data-name="Flat White" data-price="4.99" data-image-url="Images/menu7.png">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/menu8.png" alt="">
+          <h3>Iced Latte</h3>
+          <div class="price">$4.99</div>
+          <button class="btn add-to-cart" data-name="Iced Latte" data-price="4.99" data-image-url="Images/menu8.png">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/menu9.png" alt="">
+          <h3>Americano</h3>
+          <div class="price">$3.99</div>
+          <button class="btn add-to-cart" data-name="Americano" data-price="3.99" data-image-url="Images/menu9.png">Add to Cart</button>
+        </div>
+        <div class="box">
+          <img src="Images/menu10.jpg" alt="">
+          <h3>Iced Mocha</h3>
+          <div class="price">$3.99</div>
+          <button class="btn add-to-cart" data-name="Iced Mocha" data-price="3.99" data-image-url="Images/menu10.jpg">Add to Cart</button>
+        </div>
+        <div class="box">
+          <img src="Images/menu11.png" alt="">
+          <h3>Nitro Cold Brew
+          </h3>
+          <div class="price">$4.99</div>
+          <button class="btn add-to-cart" data-name="Nitro Cold Brew
+          " data-price="4.99" data-image-url="Images/menu11.png">Add to Cart</button>
+        </div>
+        <div class="box">
+          <img src="Images/menu12.png" alt="">
+          <h3>Macchiato</h3>
+          <div class="price">$3.99</div>
+          <button class="btn add-to-cart" data-name="Macchiato" data-price="3.99" data-image-url="Images/menu12.png">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+    </section>
+
+
+
+    <section id="PRODUCTS" class="menu">
+      <h1 class="heading">PRODUCTS</h1>
+      <div class="box-container">
+        <div class="box">
+          <img src="Images/product1.png" alt="">
+          <h3>Mag warmer</h3>
+          <div class="price">$19.99</div>
+          <button class="btn add-to-cart" data-name="Mag warmer" data-price="19.99" data-image-url="Images/product1.png">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/product2.jpg" alt="">
+          <h3>Drip coffee machine </h3>
+          <div class="price">$79.99</div>
+          <button class="btn add-to-cart" data-name="Drip coffee machine" data-price="79.99" data-image-url="Images/product2.jpg">Add to Cart</button>
+        </div>
+       
+    
+        <div class="box">
+          <img src="Images/product3.png" alt="">
+          <h3>Electric coffee grinder</h3>
+          <div class="price">$23.99</div>
+          <button class="btn add-to-cart" data-name="Electric coffee grinder" data-price="23.99" data-image-url="Images/product3.png">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/product4.jpg" alt="">
+          <h3>Coffee press</h3>
+          <div class="price">$19.99</div>
+          <button class="btn add-to-cart" data-name="Coffee press" data-price="19.99" data-image-url="Images/product4.jpg">Add to Cart</button>
+        </div>
+        <div class="box">
+          <img src="Images/product5.png" alt="">
+          <h3>Drink shaker</h3>
+          <div class="price">$9.99</div>
+          <button class="btn add-to-cart" data-name="Drink shaker" data-price="9.99" data-image-url="Images/product5.png">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/product6.jpg" alt="">
+          <h3>Coffee roasters</h3>
+          <div class="price">$99.99</div>
+          <button class="btn add-to-cart" data-name="Coffee roasters" data-price="99.99" data-image-url="Images/product6.jpg">Add to Cart</button>
+        </div>
+    
+        <div class="box">
+          <img src="Images/product7.png" alt="">
+          <h3>Italian Coffee Maker</h3>
+          <div class="price">$49.99</div>
+          <button class="btn add-to-cart" data-name="Italian Coffee Maker" data-price="49.99" data-image-url="Images/product7.png">Add to Cart</button>
+        </div>
+        <div class="box">
+          <img src="Images/product8.png" alt="">
+          <h3>Travel Coffee Mug</h3>
+          <div class="price">$14.99</div>
+          <button class="btn add-to-cart" data-name="Travel Coffee Mug" data-price="14.99" data-image-url="Images/product8.png">Add to Cart</button>
+        </div>
+        <div class="box">
+          <img src="Images/product9.png" alt="">
+          <h3>6 Coffee Mugs</h3>
+          <div class="price">$19.99</div>
+          <button class="btn add-to-cart" data-name="6 Coffee Mugs" data-price="19.99" data-image-url="Images/product9.png">Add to Cart</button>
+        </div>
+        <div class="box">
+          <img src="Images/product10.png" alt="">
+          <h3>Glass Coffee Filter</h3> 
+          <div class="price">$14.99</div>
+          <button class="btn add-to-cart" data-name="Glass Coffee Filter" data-price="14.99" data-image-url="Images/product10.png">Add to Cart</button>
+        </div>
+        <div class="box">
+          <img src="Images/product11.png" alt="">
+          <h3>Our Special Coffee Beans</h3>
+          <div class="price">$7.99</div>
+          <button class="btn add-to-cart" data-name="Our Special Coffee Beans" data-price="7.99" data-image-url="Images/product11.png">Add to Cart</button>
+        </div>
+        <div class="box">
+          <img src="Images/product12.png" alt="">
+          <h3>4 in 1 Coffee Steamer and Frother</h3>
+          <div class="price">$39.99</div>
+          <button class="btn add-to-cart" data-name="4 in 1 Coffee Steamer and Frother" data-price="39.99" data-image-url="Images/product12.png">Add to Cart</button>
+        </div>
+        </div>
+    </section>
+
+    <section id="CONTACT" class="contact-section">
+      <h1 class="heading">Contact us</h1>
+      <div class="contact-container">
+        <p class="text">Got questions? We'd love to hear from you. Send us a message!</p>
+        <form action="#" method="post" class="contact-form">
+          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="email" name="email" placeholder="Your Email" required>
+          <input type="text" name="subject" placeholder="Subject" required>
+          <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+          <button type="submit">Send Message</button>
+        </form>
+        <div class="contact-info">
+          <p>Email: <a href="caffeineShop@gmail.com">caffeineShop@gmail.com</a></p>
+          <p>Phone: +961 70754267</p>
+          <div class="social-links">
+            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <script src="script.js"></script>
+  </body>
+</html>
