@@ -1,89 +1,74 @@
 <?php
-session_start();
-require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/connection.php';
 
-if (!isset($_SESSION['cart'])) {
-  $_SESSION['cart'] = [];
-}
-
-function addItemToCartById(PDO $pdo, int $productId): void {
-  $product = fetch_product_by_id($pdo, $productId);
-  if (!$product) {
-    return;
-  }
-  $key = (string) $product['id'];
-  if (!isset($_SESSION['cart'][$key])) {
-    $_SESSION['cart'][$key] = [
-      'id' => (int) $product['id'],
-      'name' => $product['name'],
-      'price' => (float) $product['price'],
-      'quantity' => 0,
-      'image_url' => $product['image_url'],
-    ];
-  }
-  $_SESSION['cart'][$key]['quantity'] += 1;
-}
-
-function decrementItem(string $key): void {
-  if (isset($_SESSION['cart'][$key])) {
-    $_SESSION['cart'][$key]['quantity'] -= 1;
-    if ($_SESSION['cart'][$key]['quantity'] <= 0) {
-      unset($_SESSION['cart'][$key]);
+// CREATE: add to cart
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create') {
+  $productId = (int) ($_POST['product_id'] ?? 0);
+  if ($productId > 0) {
+    // If item exists, increment qty; else insert new
+    $check = $conn->prepare('SELECT id, quantity FROM cart_items WHERE product_id = ?');
+    $check->bind_param('i', $productId);
+    $check->execute();
+    $res = $check->get_result();
+    if ($row = $res->fetch_assoc()) {
+      $newQty = (int)$row['quantity'] + 1;
+      $upd = $conn->prepare('UPDATE cart_items SET quantity = ? WHERE id = ?');
+      $upd->bind_param('ii', $newQty, $row['id']);
+      $upd->execute();
+    } else {
+      $ins = $conn->prepare('INSERT INTO cart_items (product_id, quantity) VALUES (?, 1)');
+      $ins->bind_param('i', $productId);
+      $ins->execute();
     }
   }
-}
-
-function removeItem(string $key): void {
-  if (isset($_SESSION['cart'][$key])) {
-    unset($_SESSION['cart'][$key]);
-  }
-}
-
-function clearCart(): void {
-  $_SESSION['cart'] = [];
-}
-
-function getCartItems(): array {
-  return $_SESSION['cart'];
-}
-
-function getCartTotal(): float {
-  $total = 0.0;
-  foreach (getCartItems() as $item) {
-    $total += $item['price'] * $item['quantity'];
-  }
-  return $total;
-}
-
-$pdo = get_db();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $action = $_POST['action'] ?? '';
-  if ($action === 'add') {
-    $productId = (int) ($_POST['product_id'] ?? 0);
-    if ($productId > 0) {
-      addItemToCartById($pdo, $productId);
-    }
-  } elseif ($action === 'decrement') {
-    $key = (string) ($_POST['key'] ?? '');
-    if ($key !== '') {
-      decrementItem($key);
-    }
-  } elseif ($action === 'remove') {
-    $key = (string) ($_POST['key'] ?? '');
-    if ($key !== '') {
-      removeItem($key);
-    }
-  } elseif ($action === 'clear') {
-    clearCart();
-  }
-
   header('Location: cart.php');
   exit;
 }
 
-$items = getCartItems();
-$total = getCartTotal();
+// UPDATE: change quantity
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'update') {
+  $itemId = (int) ($_POST['item_id'] ?? 0);
+  $quantity = max(0, (int) ($_POST['quantity'] ?? 0));
+  if ($itemId > 0) {
+    if ($quantity === 0) {
+      $del = $conn->prepare('DELETE FROM cart_items WHERE id = ?');
+      $del->bind_param('i', $itemId);
+      $del->execute();
+    } else {
+      $upd = $conn->prepare('UPDATE cart_items SET quantity = ? WHERE id = ?');
+      $upd->bind_param('ii', $quantity, $itemId);
+      $upd->execute();
+    }
+  }
+  header('Location: cart.php');
+  exit;
+}
+
+// DELETE: remove item
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete') {
+  $itemId = (int) ($_POST['item_id'] ?? 0);
+  if ($itemId > 0) {
+    $del = $conn->prepare('DELETE FROM cart_items WHERE id = ?');
+    $del->bind_param('i', $itemId);
+    $del->execute();
+  }
+  header('Location: cart.php');
+  exit;
+}
+
+// READ: show cart
+$sql = 'SELECT ci.id AS cart_item_id, ci.quantity, p.id AS product_id, p.name, p.price, p.image_url
+        FROM cart_items ci
+        JOIN products p ON p.id = ci.product_id
+        ORDER BY ci.id ASC';
+$result = $conn->query($sql);
+
+$items = [];
+$total = 0.0;
+while ($row = $result->fetch_assoc()) {
+  $items[] = $row;
+  $total += ((float)$row['price']) * ((int)$row['quantity']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,40 +97,26 @@ $total = getCartTotal();
         <?php if (empty($items)) { ?>
           <p>Your cart is empty.</p>
         <?php } else { ?>
-          <?php foreach ($items as $key => $item) { ?>
+          <?php foreach ($items as $item) { ?>
             <div class="box cart-item">
               <img class="cart-item-image" src="<?php echo htmlspecialchars($item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
               <h3><?php echo htmlspecialchars($item['name']); ?></h3>
-              <div class="price">$<?php echo number_format($item['price'], 2); ?></div>
-              <div class="quantity">Quantity: <?php echo (int) $item['quantity']; ?></div>
-              <div class="actions">
-                <form action="cart.php" method="post" style="display:inline-block">
-                  <input type="hidden" name="action" value="decrement">
-                  <input type="hidden" name="key" value="<?php echo htmlspecialchars((string)$key); ?>">
-                  <button type="submit" class="btn">-</button>
-                </form>
-                <form action="cart.php" method="post" style="display:inline-block">
-                  <input type="hidden" name="action" value="add">
-                  <input type="hidden" name="product_id" value="<?php echo (int) $item['id']; ?>">
-                  <button type="submit" class="btn">+</button>
-                </form>
-                <form action="cart.php" method="post" style="display:inline-block">
-                  <input type="hidden" name="action" value="remove">
-                  <input type="hidden" name="key" value="<?php echo htmlspecialchars((string)$key); ?>">
-                  <button type="submit" class="btn"><i class="fas fa-trash-alt"></i></button>
-                </form>
-              </div>
+              <div class="price">$<?php echo number_format((float)$item['price'], 2); ?></div>
+              <form action="cart.php" method="post" style="margin-top:10px;">
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="item_id" value="<?php echo (int)$item['cart_item_id']; ?>">
+                <input type="number" name="quantity" min="0" value="<?php echo (int)$item['quantity']; ?>" style="width:80px;">
+                <button type="submit" class="btn">Update</button>
+              </form>
+              <form action="cart.php" method="post" style="margin-top:6px;">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="item_id" value="<?php echo (int)$item['cart_item_id']; ?>">
+                <button type="submit" class="btn">Remove</button>
+              </form>
             </div>
           <?php } ?>
           <div id="cart-total" style="margin-top: 20px;">
             <strong>Total: $<?php echo number_format($total, 2); ?></strong>
-          </div>
-          <div style="margin-top: 10px;">
-            <form action="cart.php" method="post" style="display:inline-block">
-              <input type="hidden" name="action" value="clear">
-              <button type="submit" class="btn">Clear Cart</button>
-            </form>
-            <a href="index.php#MENU" class="btn" style="margin-left:10px;">Continue Shopping</a>
           </div>
         <?php } ?>
       </div>

@@ -1,11 +1,10 @@
 <?php
-require_once __DIR__ . '/functions.php';
-$pdo = get_db();
-$drinks = fetch_products_by_category($pdo, 'drink');
-$gear = fetch_products_by_category($pdo, 'gear');
+require_once __DIR__ . '/connection.php';
+
+$drinks = $conn->query("SELECT id, name, price, image_url FROM products WHERE category='drink' ORDER BY id ASC");
+$gear   = $conn->query("SELECT id, name, price, image_url FROM products WHERE category='gear' ORDER BY id ASC");
 ?>
 <!DOCTYPE html>
-<!-- Coding By CodingNepal - www.codingnepalweb.com -->
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -16,33 +15,24 @@ $gear = fetch_products_by_category($pdo, 'gear');
   </head>
   <body>
     <header class="header">
-      
-
       <img class="logo" src="Images/logo.png"/>
-
       <nav class="navbar">
-          <a href="#HOME">HOME</a>
-          <a href="#ABOUT">ABOUT US</a>
-          <a href="#MENU">MENU</a>
-          <a href="#PRODUCTS">OTHER PRODUCTS</a>
-          <a href="#CONTACT">CONTACT US</a>
-          <a id="cart-icon" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
+        <a href="#HOME">HOME</a>
+        <a href="#ABOUT">ABOUT US</a>
+        <a href="#MENU">MENU</a>
+        <a href="#PRODUCTS">OTHER PRODUCTS</a>
+        <a href="#CONTACT">CONTACT US</a>
+        <a id="cart-icon" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
       </nav>
     </header>
-    
-
 
     <section id="HOME" class="home-section">
       <div class="content">
         <h2>It's All About Coffee</h2>
-        <p>
-          Savor the rich aroma and bold flavors of our handcrafted brews. 
-          From the first sip to the last drop, experience the true essence of coffee bliss with each cup from Caffeine.
-        </p>
+        <p>Savor the rich aroma and bold flavors of our handcrafted brews.</p>
         <a id="order-now-button" class="btn" href="#MENU">Order Now</a>
       </div>
     </section>
-
 
     <section id="ABOUT" class="about">
       <h1 class="heading">About us</h1>
@@ -52,51 +42,45 @@ $gear = fetch_products_by_category($pdo, 'gear');
         </div>
         <div class="content">
           <h3>Caffeine: Where Coffee Addicts Unite</h3>
-          <p>Welcome to Caffeine, your go-to hub for coffee lovers! 
-            Whether you're craving a perfectly brewed cup of joe or searching for top-notch coffee accessories and equipment, we've got you covered.
-             From premium beans to brewing gear and delicious treats, indulge your passion for all things caffeine with us!</p>
-        </div>      
+          <p>Welcome to Caffeine, your go-to hub for coffee lovers! From premium beans to brewing gear and delicious treats, indulge your passion for all things caffeine with us!</p>
+        </div>
       </div>
     </section>
-
-
 
     <section id="MENU" class="menu">
       <h1 class="heading">Menu</h1>
       <div class="box-container">
-        <?php foreach ($drinks as $product) { ?>
+        <?php while ($p = $drinks->fetch_assoc()) { ?>
           <div class="box">
-            <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="">
-            <h3><?php echo htmlspecialchars($product['name']); ?></h3>
-            <div class="price">$<?php echo format_price((float)$product['price']); ?></div>
+            <img src="<?php echo htmlspecialchars($p['image_url']); ?>" alt="">
+            <h3><?php echo htmlspecialchars($p['name']); ?></h3>
+            <div class="price">$<?php echo number_format((float)$p['price'], 2); ?></div>
             <form action="cart.php" method="post">
-              <input type="hidden" name="action" value="add">
-              <input type="hidden" name="product_id" value="<?php echo (int)$product['id']; ?>">
+              <input type="hidden" name="action" value="create">
+              <input type="hidden" name="product_id" value="<?php echo (int)$p['id']; ?>">
               <button type="submit" class="btn">Add to Cart</button>
             </form>
           </div>
         <?php } ?>
       </div>
-      </section>
-
-
+    </section>
 
     <section id="PRODUCTS" class="menu">
       <h1 class="heading">Products</h1>
       <div class="box-container">
-        <?php foreach ($gear as $product) { ?>
+        <?php while ($p = $gear->fetch_assoc()) { ?>
           <div class="box">
-            <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="">
-            <h3><?php echo htmlspecialchars($product['name']); ?></h3>
-            <div class="price">$<?php echo format_price((float)$product['price']); ?></div>
+            <img src="<?php echo htmlspecialchars($p['image_url']); ?>" alt="">
+            <h3><?php echo htmlspecialchars($p['name']); ?></h3>
+            <div class="price">$<?php echo number_format((float)$p['price'], 2); ?></div>
             <form action="cart.php" method="post">
-              <input type="hidden" name="action" value="add">
-              <input type="hidden" name="product_id" value="<?php echo (int)$product['id']; ?>">
+              <input type="hidden" name="action" value="create">
+              <input type="hidden" name="product_id" value="<?php echo (int)$p['id']; ?>">
               <button type="submit" class="btn">Add to Cart</button>
             </form>
           </div>
         <?php } ?>
-        </div>
+      </div>
     </section>
 
     <section id="CONTACT" class="contact-section">
@@ -110,15 +94,6 @@ $gear = fetch_products_by_category($pdo, 'gear');
           <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
           <button type="submit">Send Message</button>
         </form>
-        <div class="contact-info">
-          <p>Email: <a href="caffeineShop@gmail.com">caffeineShop@gmail.com</a></p>
-          <p>Phone: +961 70754267</p>
-          <div class="social-links">
-            <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://twitter.com"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
-          </div>
-        </div>
       </div>
     </section>
   </body>
