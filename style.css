@@ -72,20 +72,6 @@ body{
   color:#713c1f;
 }
 
-
-#cart-container {
-  position: fixed;
-  top: 90px; 
-  right: 20px;
-  width: 300px;
-  background-color: white;
-  border: 1px solid #261004;
-  padding: 10px;
-  display: none;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
 .home-section {
   height: 100vh;
   background-image: url(Images/background.jpg);
@@ -116,7 +102,9 @@ body{
 }
 
 
-.home-section .content button {
+.home-section .content button,
+.home-section .content .btn,
+.btn{
   background: #fff;
   padding: 12px 30px;
   border: none;
@@ -126,9 +114,12 @@ body{
   cursor: pointer;
   font-weight: 500;
   transition: 0.2s ease;
+  color: black;
 }
 
-.home-section .content button:hover {
+.home-section .content button:hover,
+.home-section .content .btn:hover,
+.btn:hover {
   color: #fff;
   background-color: #713c1f;
   letter-spacing: 2px;
@@ -215,23 +206,6 @@ body{
   transform: scale(1.05);
 }
 
-.btn{
-  margin-top: 15px;
-  position:relative;
-  padding: 15px; 
-  font-size: 20px;
-  color: black;
-  background-color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-   
-}
-
-.btn:hover {
-  letter-spacing: 1px;
-}
-
 .cart-item {
   display: flex;
   align-items: center;
@@ -239,64 +213,17 @@ body{
   border-bottom: 1px solid #ccc;
 }
 
-.cart-item-details {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-
-.cart-item-quantity {
-  margin-left: 60px;
-  size: 4px;
-  text-align: center;
-}
-.cart-item-name {
-  font-size: 20px;
-}
-  
 .cart-item-image{
   width: 70px;
   height: auto;
   margin-right: 20px;
 }
-.cart-item-price{
-  color: green;
-  font-size: 15px;
-}
-.delete-item {
-  background-color: transparent;
-  border: none;
-  color: red;
-  cursor: pointer;
-  padding: 0;
-}
 
-.delete-item:hover {
-  color: darkred;
-}
 #cart-total {
   margin-top: 16px; 
   font-weight: bold;
   text-align:end;
 }
-
-#checkout-button {
-  margin-top: 16px; 
-  padding: 15px; 
-  width: 100%;
-  font-size: 16px; 
-  background-color: #007bff; 
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-#checkout-button:hover {
-  background-color: #0056b3;
-}
-
 
 .contact-section {
   text-align: center;
