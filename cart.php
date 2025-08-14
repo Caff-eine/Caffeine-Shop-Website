@@ -1,34 +1,41 @@
 <?php
 session_start();
+require_once __DIR__ . '/functions.php';
 
 if (!isset($_SESSION['cart'])) {
   $_SESSION['cart'] = [];
 }
 
-function addItemToCart(string $name, float $price, string $imageUrl): void {
-  if (!isset($_SESSION['cart'][$name])) {
-    $_SESSION['cart'][$name] = [
-      'name' => $name,
-      'price' => $price,
+function addItemToCartById(PDO $pdo, int $productId): void {
+  $product = fetch_product_by_id($pdo, $productId);
+  if (!$product) {
+    return;
+  }
+  $key = (string) $product['id'];
+  if (!isset($_SESSION['cart'][$key])) {
+    $_SESSION['cart'][$key] = [
+      'id' => (int) $product['id'],
+      'name' => $product['name'],
+      'price' => (float) $product['price'],
       'quantity' => 0,
-      'image_url' => $imageUrl,
+      'image_url' => $product['image_url'],
     ];
   }
-  $_SESSION['cart'][$name]['quantity'] += 1;
+  $_SESSION['cart'][$key]['quantity'] += 1;
 }
 
-function decrementItem(string $name): void {
-  if (isset($_SESSION['cart'][$name])) {
-    $_SESSION['cart'][$name]['quantity'] -= 1;
-    if ($_SESSION['cart'][$name]['quantity'] <= 0) {
-      unset($_SESSION['cart'][$name]);
+function decrementItem(string $key): void {
+  if (isset($_SESSION['cart'][$key])) {
+    $_SESSION['cart'][$key]['quantity'] -= 1;
+    if ($_SESSION['cart'][$key]['quantity'] <= 0) {
+      unset($_SESSION['cart'][$key]);
     }
   }
 }
 
-function removeItem(string $name): void {
-  if (isset($_SESSION['cart'][$name])) {
-    unset($_SESSION['cart'][$name]);
+function removeItem(string $key): void {
+  if (isset($_SESSION['cart'][$key])) {
+    unset($_SESSION['cart'][$key]);
   }
 }
 
@@ -48,24 +55,24 @@ function getCartTotal(): float {
   return $total;
 }
 
+$pdo = get_db();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $action = $_POST['action'] ?? '';
   if ($action === 'add') {
-    $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-    $price = isset($_POST['price']) ? (float) $_POST['price'] : 0.0;
-    $imageUrl = isset($_POST['image_url']) ? trim($_POST['image_url']) : '';
-    if ($name !== '' && $price > 0) {
-      addItemToCart($name, $price, $imageUrl);
+    $productId = (int) ($_POST['product_id'] ?? 0);
+    if ($productId > 0) {
+      addItemToCartById($pdo, $productId);
     }
   } elseif ($action === 'decrement') {
-    $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-    if ($name !== '') {
-      decrementItem($name);
+    $key = (string) ($_POST['key'] ?? '');
+    if ($key !== '') {
+      decrementItem($key);
     }
   } elseif ($action === 'remove') {
-    $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-    if ($name !== '') {
-      removeItem($name);
+    $key = (string) ($_POST['key'] ?? '');
+    if ($key !== '') {
+      removeItem($key);
     }
   } elseif ($action === 'clear') {
     clearCart();
@@ -105,7 +112,7 @@ $total = getCartTotal();
         <?php if (empty($items)) { ?>
           <p>Your cart is empty.</p>
         <?php } else { ?>
-          <?php foreach ($items as $item) { ?>
+          <?php foreach ($items as $key => $item) { ?>
             <div class="box cart-item">
               <img class="cart-item-image" src="<?php echo htmlspecialchars($item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
               <h3><?php echo htmlspecialchars($item['name']); ?></h3>
@@ -114,19 +121,17 @@ $total = getCartTotal();
               <div class="actions">
                 <form action="cart.php" method="post" style="display:inline-block">
                   <input type="hidden" name="action" value="decrement">
-                  <input type="hidden" name="name" value="<?php echo htmlspecialchars($item['name']); ?>">
+                  <input type="hidden" name="key" value="<?php echo htmlspecialchars((string)$key); ?>">
                   <button type="submit" class="btn">-</button>
                 </form>
                 <form action="cart.php" method="post" style="display:inline-block">
                   <input type="hidden" name="action" value="add">
-                  <input type="hidden" name="name" value="<?php echo htmlspecialchars($item['name']); ?>">
-                  <input type="hidden" name="price" value="<?php echo htmlspecialchars($item['price']); ?>">
-                  <input type="hidden" name="image_url" value="<?php echo htmlspecialchars($item['image_url']); ?>">
+                  <input type="hidden" name="product_id" value="<?php echo (int) $item['id']; ?>">
                   <button type="submit" class="btn">+</button>
                 </form>
                 <form action="cart.php" method="post" style="display:inline-block">
                   <input type="hidden" name="action" value="remove">
-                  <input type="hidden" name="name" value="<?php echo htmlspecialchars($item['name']); ?>">
+                  <input type="hidden" name="key" value="<?php echo htmlspecialchars((string)$key); ?>">
                   <button type="submit" class="btn"><i class="fas fa-trash-alt"></i></button>
                 </form>
               </div>

@@ -1,3 +1,9 @@
+<?php
+require_once __DIR__ . '/functions.php';
+$pdo = get_db();
+$drinks = fetch_products_by_category($pdo, 'drink');
+$gear = fetch_products_by_category($pdo, 'gear');
+?>
 <!DOCTYPE html>
 <!-- Coding By CodingNepal - www.codingnepalweb.com -->
 <html lang="en">
@@ -39,7 +45,7 @@
 
 
     <section id="ABOUT" class="about">
-      <h1 class="heading">about us</h1>
+      <h1 class="heading">About us</h1>
       <div class="row">
         <div class="image">
           <img src="Images/about.png" alt="">
@@ -56,321 +62,40 @@
 
 
     <section id="MENU" class="menu">
-      <h1 class="heading">menu</h1>
+      <h1 class="heading">Menu</h1>
       <div class="box-container">
-        <div class="box">
-          <img src="Images/menu1.png" alt="">
-          <h3>Cortado</h3>
-          <div class="price">$3.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Cortado">
-            <input type="hidden" name="price" value="3.99">
-            <input type="hidden" name="image_url" value="Images/menu1.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        
-        
-    
-        <div class="box">
-          <img src="Images/menu2.png" alt="">
-          <h3>Cappuccino</h3>
-          <div class="price">$3.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Cappuccino">
-            <input type="hidden" name="price" value="3.99">
-            <input type="hidden" name="image_url" value="Images/menu2.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
+        <?php foreach ($drinks as $product) { ?>
+          <div class="box">
+            <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="">
+            <h3><?php echo htmlspecialchars($product['name']); ?></h3>
+            <div class="price">$<?php echo format_price((float)$product['price']); ?></div>
+            <form action="cart.php" method="post">
+              <input type="hidden" name="action" value="add">
+              <input type="hidden" name="product_id" value="<?php echo (int)$product['id']; ?>">
+              <button type="submit" class="btn">Add to Cart</button>
+            </form>
+          </div>
+        <?php } ?>
+      </div>
+      </section>
 
-        
-    
-        <div class="box">
-          <img src="Images/menu3.png" alt="">
-          <h3>Drip Coffee</h3>
-          <div class="price">$2.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Drip Coffee">
-            <input type="hidden" name="price" value="2.99">
-            <input type="hidden" name="image_url" value="Images/menu3.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/menu4.png" alt="">
-          <h3>Cold Brew</h3>
-          <div class="price">$3.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Cold Brew">
-            <input type="hidden" name="price" value="3.99">
-            <input type="hidden" name="image_url" value="Images/menu4.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/menu5.png" alt="">
-          <h3>Latte</h3>
-          <div class="price">$4.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Latte">
-            <input type="hidden" name="price" value="4.99">
-            <input type="hidden" name="image_url" value="Images/menu5.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/menu6.png" alt="">
-          <h3>Espresso Shot</h3>
-          <div class="price">$2.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Espresso Shot">
-            <input type="hidden" name="price" value="2.99">
-            <input type="hidden" name="image_url" value="Images/menu6.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/menu7.png" alt="">
-          <h3>Flat White</h3>
-          <div class="price">$4.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Flat White">
-            <input type="hidden" name="price" value="4.99">
-            <input type="hidden" name="image_url" value="Images/menu7.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/menu8.png" alt="">
-          <h3>Iced Latte</h3>
-          <div class="price">$4.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Iced Latte">
-            <input type="hidden" name="price" value="4.99">
-            <input type="hidden" name="image_url" value="Images/menu8.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/menu9.png" alt="">
-          <h3>Americano</h3>
-          <div class="price">$3.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Americano">
-            <input type="hidden" name="price" value="3.99">
-            <input type="hidden" name="image_url" value="Images/menu9.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        <div class="box">
-          <img src="Images/menu10.jpg" alt="">
-          <h3>Iced Mocha</h3>
-          <div class="price">$3.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Iced Mocha">
-            <input type="hidden" name="price" value="3.99">
-            <input type="hidden" name="image_url" value="Images/menu10.jpg">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        <div class="box">
-          <img src="Images/menu11.png" alt="">
-          <h3>Nitro Cold Brew
-          </h3>
-          <div class="price">$4.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Nitro Cold Brew">
-            <input type="hidden" name="price" value="4.99">
-            <input type="hidden" name="image_url" value="Images/menu11.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        <div class="box">
-          <img src="Images/menu12.png" alt="">
-          <h3>Macchiato</h3>
-          <div class="price">$3.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Macchiato">
-            <input type="hidden" name="price" value="3.99">
-            <input type="hidden" name="image_url" value="Images/menu12.png">
-                         <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-             </div>
-     </section>
 
-     <section id="PRODUCTS" class="menu">
-      <h1 class="heading">PRODUCTS</h1>
+
+    <section id="PRODUCTS" class="menu">
+      <h1 class="heading">Products</h1>
       <div class="box-container">
-        <div class="box">
-          <img src="Images/product1.png" alt="">
-          <h3>Mag warmer</h3>
-          <div class="price">$19.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Mag warmer">
-            <input type="hidden" name="price" value="19.99">
-            <input type="hidden" name="image_url" value="Images/product1.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/product2.jpg" alt="">
-          <h3>Drip coffee machine </h3>
-          <div class="price">$79.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Drip coffee machine">
-            <input type="hidden" name="price" value="79.99">
-            <input type="hidden" name="image_url" value="Images/product2.jpg">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-       
-    
-        <div class="box">
-          <img src="Images/product3.png" alt="">
-          <h3>Electric coffee grinder</h3>
-          <div class="price">$23.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Electric coffee grinder">
-            <input type="hidden" name="price" value="23.99">
-            <input type="hidden" name="image_url" value="Images/product3.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/product4.jpg" alt="">
-          <h3>Coffee press</h3>
-          <div class="price">$19.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Coffee press">
-            <input type="hidden" name="price" value="19.99">
-            <input type="hidden" name="image_url" value="Images/product4.jpg">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        <div class="box">
-          <img src="Images/product5.png" alt="">
-          <h3>Drink shaker</h3>
-          <div class="price">$9.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Drink shaker">
-            <input type="hidden" name="price" value="9.99">
-            <input type="hidden" name="image_url" value="Images/product5.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/product6.jpg" alt="">
-          <h3>Coffee roasters</h3>
-          <div class="price">$99.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Coffee roasters">
-            <input type="hidden" name="price" value="99.99">
-            <input type="hidden" name="image_url" value="Images/product6.jpg">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-    
-        <div class="box">
-          <img src="Images/product7.png" alt="">
-          <h3>Italian Coffee Maker</h3>
-          <div class="price">$49.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Italian Coffee Maker">
-            <input type="hidden" name="price" value="49.99">
-            <input type="hidden" name="image_url" value="Images/product7.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        <div class="box">
-          <img src="Images/product8.png" alt="">
-          <h3>Travel Coffee Mug</h3>
-          <div class="price">$14.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Travel Coffee Mug">
-            <input type="hidden" name="price" value="14.99">
-            <input type="hidden" name="image_url" value="Images/product8.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        <div class="box">
-          <img src="Images/product9.png" alt="">
-          <h3>6 Coffee Mugs</h3>
-          <div class="price">$19.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="6 Coffee Mugs">
-            <input type="hidden" name="price" value="19.99">
-            <input type="hidden" name="image_url" value="Images/product9.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        <div class="box">
-          <img src="Images/product10.png" alt="">
-          <h3>Glass Coffee Filter</h3> 
-          <div class="price">$14.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Glass Coffee Filter">
-            <input type="hidden" name="price" value="14.99">
-            <input type="hidden" name="image_url" value="Images/product10.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        <div class="box">
-          <img src="Images/product11.png" alt="">
-          <h3>Our Special Coffee Beans</h3>
-          <div class="price">$7.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="Our Special Coffee Beans">
-            <input type="hidden" name="price" value="7.99">
-            <input type="hidden" name="image_url" value="Images/product11.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
-        <div class="box">
-          <img src="Images/product12.png" alt="">
-          <h3>4 in 1 Coffee Steamer and Frother</h3>
-          <div class="price">$39.99</div>
-          <form action="cart.php" method="post">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="name" value="4 in 1 Coffee Steamer and Frother">
-            <input type="hidden" name="price" value="39.99">
-            <input type="hidden" name="image_url" value="Images/product12.png">
-            <button type="submit" class="btn">Add to Cart</button>
-          </form>
-        </div>
+        <?php foreach ($gear as $product) { ?>
+          <div class="box">
+            <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="">
+            <h3><?php echo htmlspecialchars($product['name']); ?></h3>
+            <div class="price">$<?php echo format_price((float)$product['price']); ?></div>
+            <form action="cart.php" method="post">
+              <input type="hidden" name="action" value="add">
+              <input type="hidden" name="product_id" value="<?php echo (int)$product['id']; ?>">
+              <button type="submit" class="btn">Add to Cart</button>
+            </form>
+          </div>
+        <?php } ?>
         </div>
     </section>
 
